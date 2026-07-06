@@ -27,7 +27,7 @@ with generate_tab:
     )
     template_file = st.file_uploader("Upload Certificate Template",type=["png", "jpg", "jpeg"])
     excel_file = st.file_uploader("Upload Participant Excel File",type=["xlsx"])
-    font_size = st.number_input("Enter Name Font Size",min_value=20,max_value=200,value=70)
+    font_size = st.number_input("Enter Name Font Size",min_value=20,max_value=200,value=150)
 
     if template_file and excel_file:
         df = pd.read_excel(excel_file)
