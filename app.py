@@ -10,7 +10,7 @@ import uuid
 
 #Get certificate id from qr code url
 query_params=st.query_params
-qr_certificate_id=query_params.get("certificate_id")
+qr_certificate_id=query_params.get("certificate_id","")
 
 st.set_page_config(page_title="Certificate Generation & Verification System")
 st.title("Certificate Generation & Verification System")
@@ -18,6 +18,21 @@ st.title("Certificate Generation & Verification System")
 # File where valid certificate records are stored
 RECORD_FILE = "certificates.csv"
 
+if qr_certificate_id:
+    st.header("Certificate Verification")
+    if not os.path.exists(RECORD_FILE):
+        st.error("No certificate records found.")
+    else:
+        certificate_database = pd.read_csv(RECORD_FILE)
+        result = certificate_database[certificate_database["Certificate_ID"]== qr_certificate_id.strip()]
+        if not result.empty:
+            participant_name = result.iloc[0]["Name"]
+            st.success("Certificate is Valid! ")
+            st.write(f"*Certificate ID:* {qr_certificate_id}")
+            st.write(f"*Issued To:* {participant_name}")
+        else:
+            st.error("Invalid Certificate ID ")
+    st.stop()
 # Create two tabs
 generate_tab, verify_tab = st.tabs(["Generate Certificates", "Verify Certificate"])
 
