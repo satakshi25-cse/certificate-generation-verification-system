@@ -117,7 +117,7 @@ Add your deployed application link here.
 ![Generated certificate](screenshots/generated-certificate.png)
 ![QR code verification result](screenshots/verification-result.jpeg)
 
-## 🔮 Future Improvements
+## Future Improvements
 
 - Integration with a persistent cloud database
 - User authentication and admin dashboard
@@ -125,7 +125,7 @@ Add your deployed application link here.
 - Custom certificate positioning and font selection
 - Certificate generation analytics
 
-## 👩‍💻 Author
+## Author
 
 *Satakshi Rai*
 
