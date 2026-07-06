@@ -8,6 +8,10 @@ import tempfile
 from io import BytesIO
 import uuid
 
+#Get certificate id from qr code url
+query_params=st.query_params
+qr_certificate_id=query_params.get("certificate_id")
+
 st.set_page_config(page_title="Certificate Generation & Verification System")
 st.title("Certificate Generation & Verification System")
 
@@ -69,7 +73,8 @@ with generate_tab:
                     draw.text((name_x, name_y),name,font=font,fill="black")
 
                     # QR Code Data
-                    qr_data = (f"Certificate ID: {certificate_id}\n"f"Name: {name}")
+                    verification_url=f"https://satakshi25-cse-certificate-generation-verification-s-app-sfostp.streamlit.app/?certificate_id={certificate_id}"
+                    qr_data = verification_url
                     qr = qrcode.make(qr_data)
                     qr = qr.resize((100, 100))
                     margin = 80
@@ -130,21 +135,27 @@ with generate_tab:
 
 with verify_tab:
     st.header("Verify Certificate")
-    st.write("Enter the Certificate ID to check " "whether the certificate is valid.")
-    certificate_id_input = st.text_input("Certificate ID")
-    if st.button("Verify Certificate"):
+
+    # Get Certificate ID from QR URL
+    qr_certificate_id = st.query_params.get("certificate_id", "")
+    st.write("Enter the Certificate ID to check whether the certificate is valid.")
+    certificate_id_input = st.text_input("Certificate ID",value=qr_certificate_id)
+
+    # Automatically verify if opened through QR,
+    # otherwise verify when button is clicked
+    verify_clicked = st.button("Verify Certificate")
+    if qr_certificate_id or verify_clicked:
         if certificate_id_input == "":
             st.warning("Please enter a Certificate ID.")
         elif not os.path.exists(RECORD_FILE):
             st.error("No certificate records found.")
         else:
             certificate_database = pd.read_csv(RECORD_FILE)
-            result = certificate_database[certificate_database["Certificate_ID"] == certificate_id_input.strip()
-            ]
+            result = certificate_database[certificate_database["Certificate_ID"] == certificate_id_input.strip()]
             if not result.empty:
                 participant_name = result.iloc[0]["Name"]
                 st.success("Certificate is Valid!")
-                st.write(f"*Certificate ID:* " f"{certificate_id_input}")
-                st.write(f"*Issued To:* "f"{participant_name}")
+                st.write(f"*Certificate ID:* {certificate_id_input}")
+                st.write(f"*Issued To:* {participant_name}")
             else:
-                st.error("Invalid Certificate ID!")
+                st.error("Invalid Certificate ID")
