@@ -115,7 +115,7 @@ Add your deployed application link here.
 
 ![Certificate generation interface](screenshots/generator-ui.png)
 ![Generated certificate](screenshots/generated-certificate.png)
-![QR code verification result](screenshots/verification-result.png)
+![QR code verification result](screenshots/verification-result.jpeg)
 
 ## 🔮 Future Improvements
 
